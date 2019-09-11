@@ -23,6 +23,7 @@ public class PianoGUI extends JFrame
 	public PianoGUI() throws MidiUnavailableException
 	{
 		this.setTitle("MY PIANO");
+		this.setSize(2000, 1500);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		JPanel top = new JPanel();
@@ -40,9 +41,9 @@ public class PianoGUI extends JFrame
 		ArrayList<Key> keys = new ArrayList<>();
 		linkLabelsToKeys(topRowLabels, bottomRowLabels, keys);
 
-		setResizable(false);
+		//setResizable(false);
 		pack();
-		this.setLocationRelativeTo(null);
+//		this.setLocationRelativeTo(null);
 
 		// setting up sound
 		Synthesizer synth = MidiSystem.getSynthesizer();
