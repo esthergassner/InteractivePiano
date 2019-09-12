@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 
 public class PianoGUI extends JFrame
 {
+	public static final int WINDOW_WIDTH = 2000;
 	private Color clientColor; // sent by server - randomly generated int
 	private ObjectOutputStream out;
 	private MidiChannel channel;
@@ -27,7 +28,7 @@ public class PianoGUI extends JFrame
 	public PianoGUI() throws MidiUnavailableException
 	{
 		this.setTitle("MY PIANO");
-		this.setSize(2000, 800);
+		this.setSize(WINDOW_WIDTH, 800);
 		this.setMinimumSize(new Dimension(850, 800));
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLayout(new BorderLayout());
@@ -93,21 +94,21 @@ public class PianoGUI extends JFrame
 
 	private void initializeBottomLabels(JPanel bottom, PianoLabel[] bottomRowLabels)
 	{
-		int bWM = this.getWidth() / 2000; //bottom width unit measure
+		int bottomWidthUnit = this.getWidth() / WINDOW_WIDTH; //bottom width unit measure
 		int bottomHeight = this.getHeight() / 2;
 		for (int i = 0; i < KeyStats.NUM_KEYS; i++)
 		{
 			if ((i & 1) == 0) // whiteKey
 			{
 				bottomRowLabels[i] = new PianoLabel(new Dimension(i == 8 || i == 10
-						? (bWM * KeyStats.BOTTOM_FAT_WIDTH) : (bWM * KeyStats.BOTTOM_WHITE_WIDTH),
+						? (bottomWidthUnit * KeyStats.BOTTOM_FAT_WIDTH) : (bottomWidthUnit * KeyStats.BOTTOM_WHITE_WIDTH),
 						bottomHeight),
 						Color.WHITE);
 				bottomRowLabels[i].addMouseListener(new KeyListener());
 			}
 			else //blackKey
 			{
-				bottomRowLabels[i] = new PianoLabel(new Dimension(bWM * KeyStats.BOTTOM_SKINNY_WIDTH, bottomHeight), Color.BLACK);
+				bottomRowLabels[i] = new PianoLabel(new Dimension(bottomWidthUnit * KeyStats.BOTTOM_SKINNY_WIDTH, bottomHeight), Color.BLACK);
 			}
 			bottom.add(bottomRowLabels[i]);
 		}
@@ -115,22 +116,22 @@ public class PianoGUI extends JFrame
 
 	private void initializeTopLabels(JPanel top, PianoLabel[] topRowLabels)
 	{
-		int tWM = this.getWidth() / 2000; //bottom width unit measure
+		int topWidthUnit = this.getWidth() / WINDOW_WIDTH; //bottom width unit measure
 		int topHeight = this.getHeight() / 2;
 		for (int i = 0; i < KeyStats.NUM_KEYS; i++)
 		{
 			if ((i & 1) == 0) // white
 			{
-				topRowLabels[i] = new PianoLabel(new Dimension(tWM * KeyStats.TOP_WHITE_WIDTH, topHeight), Color.WHITE);
+				topRowLabels[i] = new PianoLabel(new Dimension(topWidthUnit * KeyStats.TOP_WHITE_WIDTH, topHeight), Color.WHITE);
 			}
 			else if (i == 5) // skinny dude
 			{
-				topRowLabels[i] = new PianoLabel(new Dimension(tWM * KeyStats.TOP_SKINNY_WIDTH, topHeight), Color.BLACK);
+				topRowLabels[i] = new PianoLabel(new Dimension(topWidthUnit * KeyStats.TOP_SKINNY_WIDTH, topHeight), Color.BLACK);
 			}
 			else
 			// black
 			{
-				topRowLabels[i] = new PianoLabel(new Dimension(tWM * KeyStats.TOP_BLACK_WIDTH, topHeight), Color.BLACK);
+				topRowLabels[i] = new PianoLabel(new Dimension(topWidthUnit * KeyStats.TOP_BLACK_WIDTH, topHeight), Color.BLACK);
 			}
 
 			topRowLabels[i].addMouseListener(new KeyListener());
