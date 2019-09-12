@@ -37,14 +37,12 @@ public class PianoGUI extends JFrame
 		contents.setLayout(new BorderLayout());
 
 		JPanel top = new JPanel();
-		//top.setSize(this.getWidth(), this.getHeight() / 2);
 		top.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		contents.add(top, BorderLayout.NORTH);
 		PianoLabel[] topRowLabels = new PianoLabel[KeyStats.NUM_KEYS];
 		initializeTopLabels(top, topRowLabels);
 
 		JPanel bottom = new JPanel();
-		//bottom.setSize(this.getWidth(),this.getHeight() / 2);
 		bottom.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		contents.add(bottom, BorderLayout.CENTER);
 		PianoLabel[] bottomRowLabels = new PianoLabel[13];
