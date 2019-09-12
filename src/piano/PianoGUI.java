@@ -4,6 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
@@ -19,31 +22,39 @@ public class PianoGUI extends JFrame
 	private Color clientColor; // sent by server - randomly generated int
 	private ObjectOutputStream out;
 	private MidiChannel channel;
+	private JPanel contents;
 
 	public PianoGUI() throws MidiUnavailableException
 	{
 		this.setTitle("MY PIANO");
-		this.setSize(2000, 1500);
+		this.setSize(2000, 800);
+		this.setMinimumSize(new Dimension(850, 800));
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setLayout(new BorderLayout());
+
+		contents = new JPanel();
+		contents.setLayout(new BorderLayout());
 
 		JPanel top = new JPanel();
+		//top.setSize(this.getWidth(), this.getHeight() / 2);
 		top.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
-		add(top, BorderLayout.NORTH);
+		contents.add(top, BorderLayout.NORTH);
 		PianoLabel[] topRowLabels = new PianoLabel[KeyStats.NUM_KEYS];
 		initializeTopLabels(top, topRowLabels);
 
 		JPanel bottom = new JPanel();
+		//bottom.setSize(this.getWidth(),this.getHeight() / 2);
 		bottom.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
-		add(bottom, BorderLayout.CENTER);
+		contents.add(bottom, BorderLayout.CENTER);
 		PianoLabel[] bottomRowLabels = new PianoLabel[13];
 		initializeBottomLabels(bottom, bottomRowLabels);
 
+		this.add(contents, BorderLayout.CENTER);
 		ArrayList<Key> keys = new ArrayList<>();
 		linkLabelsToKeys(topRowLabels, bottomRowLabels, keys);
 
-		//setResizable(false);
 		pack();
-//		this.setLocationRelativeTo(null);
+		this.setLocationRelativeTo(null);
 
 		// setting up sound
 		Synthesizer synth = MidiSystem.getSynthesizer();
@@ -82,16 +93,21 @@ public class PianoGUI extends JFrame
 
 	private void initializeBottomLabels(JPanel bottom, PianoLabel[] bottomRowLabels)
 	{
+		int bWM = this.getWidth() / 2000; //bottom width unit measure
+		int bottomHeight = this.getHeight() / 2;
 		for (int i = 0; i < KeyStats.NUM_KEYS; i++)
 		{
 			if ((i & 1) == 0) // whiteKey
 			{
-				bottomRowLabels[i] = new PianoLabel(new Dimension(i == 8 || i == 10 ? KeyStats.BOTTOM_FAT_WIDTH : KeyStats.BOTTOM_WHITE_WIDTH, KeyStats.BOTTOM_HEIGHT), Color.WHITE);
+				bottomRowLabels[i] = new PianoLabel(new Dimension(i == 8 || i == 10
+						? (bWM * KeyStats.BOTTOM_FAT_WIDTH) : (bWM * KeyStats.BOTTOM_WHITE_WIDTH),
+						bottomHeight),
+						Color.WHITE);
 				bottomRowLabels[i].addMouseListener(new KeyListener());
 			}
-			else
+			else //blackKey
 			{
-				bottomRowLabels[i] = new PianoLabel(new Dimension(KeyStats.BOTTOM_SKINNY_WIDTH, KeyStats.BOTTOM_HEIGHT), Color.BLACK);
+				bottomRowLabels[i] = new PianoLabel(new Dimension(bWM * KeyStats.BOTTOM_SKINNY_WIDTH, bottomHeight), Color.BLACK);
 			}
 			bottom.add(bottomRowLabels[i]);
 		}
@@ -99,20 +115,22 @@ public class PianoGUI extends JFrame
 
 	private void initializeTopLabels(JPanel top, PianoLabel[] topRowLabels)
 	{
+		int tWM = this.getWidth() / 2000; //bottom width unit measure
+		int topHeight = this.getHeight() / 2;
 		for (int i = 0; i < KeyStats.NUM_KEYS; i++)
 		{
 			if ((i & 1) == 0) // white
 			{
-				topRowLabels[i] = new PianoLabel(new Dimension(KeyStats.TOP_WHITE_WIDTH, KeyStats.TOP_HEIGHT), Color.WHITE);
+				topRowLabels[i] = new PianoLabel(new Dimension(tWM * KeyStats.TOP_WHITE_WIDTH, topHeight), Color.WHITE);
 			}
 			else if (i == 5) // skinny dude
 			{
-				topRowLabels[i] = new PianoLabel(new Dimension(KeyStats.TOP_SKINNY_WIDTH, KeyStats.TOP_HEIGHT), Color.BLACK);
+				topRowLabels[i] = new PianoLabel(new Dimension(tWM * KeyStats.TOP_SKINNY_WIDTH, topHeight), Color.BLACK);
 			}
 			else
 			// black
 			{
-				topRowLabels[i] = new PianoLabel(new Dimension(KeyStats.TOP_BLACK_WIDTH, KeyStats.TOP_HEIGHT), Color.BLACK);
+				topRowLabels[i] = new PianoLabel(new Dimension(tWM * KeyStats.TOP_BLACK_WIDTH, topHeight), Color.BLACK);
 			}
 
 			topRowLabels[i].addMouseListener(new KeyListener());
